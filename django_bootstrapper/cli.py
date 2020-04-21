@@ -181,6 +181,7 @@ def parse_arguments():
     parser.add_argument('--no_input', type=bool, help="Skip prompting for input while generating project template.", default=False)
     parser.add_argument('--overwrite_if_exists', type=bool, help='If the project template target directory exists, overwrite its contents.', default=False)
     parser.add_argument('--output_dir', help='Output directory where the generated project bootstrap code is to be saved.', default='.')
+    parser.add_argument('--generate_only', type=bool, help="Just generate the django project template code and do not prepare the remote for deployment.", default=False)
 
     return parser.parse_args()
 
@@ -208,24 +209,27 @@ def main():
         config = Config(overrides={'sudo': {'password': options.password}})
         conn = Connection(options.host, port=options.port, config=config)
 
-        install_prerequisites(conn)
-        install_certbot(conn)
-        install_supervisor_service(conn)
+        if options.generate_only == False:
+            install_prerequisites(conn)
+            install_certbot(conn)
+            install_supervisor_service(conn)
 
-        create_automation_account(conn, options)
+            create_automation_account(conn, options)
 
-        create_virtualenv(conn, options)
-        upgrade_pip(conn, options)
-        create_folders(conn, options)
-        create_unix_socket(conn, options)
+            create_virtualenv(conn, options)
+            upgrade_pip(conn, options)
+            create_folders(conn, options)
+            create_unix_socket(conn, options)
 
-        generate_secret_key(conn, options)
-        generate_db_password(conn, options)
+            generate_secret_key(conn, options)
+            generate_db_password(conn, options)
 
-        print(
-            "Remote prepped for deployment.\n"
-                "Going on to create project template."
-        )
+            print(
+                "Remote prepped for deployment.\n"
+                    "Going on to create project template."
+            )
+        else:
+            print('Skipping preparing remote system for deployment.')
 
         slug = options.app.lower().replace(' ', '_')
         project_folder = os.path.join(os.path.dirname(__file__), 'project')
@@ -246,14 +250,15 @@ def main():
             output_dir=options.output_dir
         )
 
-        print("\nDone!\n"
-            "Folder {0} has the project template.\n"
+        outdir = os.path.join(os.path.abspath(options.output_dir), slug)
+
+        print("\nDone! Folder {0} has the project template.\n"
             "You may run the following (in sequence) from the project folder\n:"
             "to build & depoly the project to the remote server:\n"
             "    0. git init && git add --all && git commit -a -m \"initial commit\" \n"
             "    1. npm i\n"
             "    2. gulp\n"
-            "    3. fab deploy\n".format(slug)
+            "    3. fab deploy\n".format(outdir)
         )
 
     except Exception as ex:
