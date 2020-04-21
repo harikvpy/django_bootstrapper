@@ -182,7 +182,8 @@ def parse_arguments():
     parser.add_argument('--no_input', type=bool, help="Skip prompting for input while generating project template.", default=False)
     parser.add_argument('--overwrite_if_exists', type=bool, help='If the project template target directory exists, overwrite its contents.', default=False)
     parser.add_argument('--output_dir', help='Output directory where the generated project bootstrap code is to be saved.', default='.')
-    parser.add_argument('--generate_only', type=bool, help="Just generate the django project template code and do not prepare the remote for deployment.", default=False)
+    parser.add_argument('--skip_prep', type=bool, help="Skip prepping the remote system for deployment.", default=False)
+    parser.add_argument('--skip_generate', type=bool, help="Skip generating the django project template code.", default=False)
 
     return parser.parse_args()
 
@@ -210,7 +211,7 @@ def main():
         config = Config(overrides={'sudo': {'password': options.password}})
         conn = Connection(options.host, port=options.port, config=config)
 
-        if options.generate_only == False:
+        if not options.skip_prep:
             install_prerequisites(conn)
             install_certbot(conn)
             install_supervisor_service(conn)
@@ -232,36 +233,39 @@ def main():
         else:
             print('Skipping preparing remote system for deployment.')
 
-        slug = options.app.lower().replace(' ', '_')
-        project_folder = os.path.join(os.path.dirname(__file__), 'project')
-        cookiecutter(
-            project_folder,
-            extra_context={
-                'app_name': options.app,
-                'project_slug': slug,
-                'directory_name': slug,
-                'user_group': 'webapps',
-                'user_name': slug,
-                'domain': options.domain,
-                'host': options.host,
-                'port': options.port
-            },
-            overwrite_if_exists=options.overwrite_if_exists,
-            no_input=options.no_input,
-            output_dir=options.output_dir
-        )
+        if not options.skip_generate:
+            slug = options.app.lower().replace(' ', '_')
+            project_folder = os.path.join(os.path.dirname(__file__), 'project')
+            cookiecutter(
+                project_folder,
+                extra_context={
+                    'app_name': options.app,
+                    'project_slug': slug,
+                    'directory_name': slug,
+                    'user_group': 'webapps',
+                    'user_name': slug,
+                    'domain': options.domain,
+                    'host': options.host,
+                    'port': options.port
+                },
+                overwrite_if_exists=options.overwrite_if_exists,
+                no_input=options.no_input,
+                output_dir=options.output_dir
+            )
 
-        outdir = os.path.join(os.path.abspath(options.output_dir), slug)
+            outdir = os.path.join(os.path.abspath(options.output_dir), slug)
 
-        print("\nDone! Folder {0} has the project template.\n"
-            "You may run the following (in sequence) from the project folder\n:"
-            "to build & depoly the project to the remote server:\n"
-            "    0. git init && git add --all && git commit -a -m \"initial commit\" \n"
-            "    1. npm i\n"
-            "    2. gulp\n"
-            "    3. fab deploy\n".format(outdir)
-        )
-
+            print("\nDone! Folder {0} has the project template.\n"
+                "You may run the following (in sequence) from the project folder\n:"
+                "to build & depoly the project to the remote server:\n"
+                "    0. git init && git add --all && git commit -a -m \"initial commit\" \n"
+                "    1. npm i\n"
+                "    2. gulp\n"
+                "    3. fab deploy\n".format(outdir)
+            )
+        else:
+            print('Skipping project code generation.')
+            
     except Exception as ex:
         print('Exception: {0}'.format(str(ex)))
         exit(1)
