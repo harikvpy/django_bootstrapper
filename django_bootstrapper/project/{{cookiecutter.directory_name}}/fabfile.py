@@ -230,22 +230,23 @@ def install_dependencies(conn):
     '''
     # compare the requirements folder and if it's contents have
     # changed, invoke pip to install new depedencies
-    result = run_as_app_user(
+    # import ipdb; ipdb.set_trace()
+    # result = run_as_app_user(
+    #     conn,
+    #     "diff app.old/requirements/base.txt ./requirements/base.txt 2>&1 "\
+    #         "&& diff app.old/requirements/production.txt "\
+    #         "./requirements/production.txt 2>&1",
+    #     hide=True,
+    #     warn=True
+    # )
+    #if not result or result.return_code != 0:
+    print("Updating python dependencies...")
+    run_as_app_user(
         conn,
-        "diff app.old/requirements/base.txt ./requirements/base.txt 2>&1 "\
-            "&& diff app.old/requirements/production.txt "\
-            "./requirements/production.txt 2>&1",
-        hide=True,
-        warn=True
+        "pip install --trusted-host "\
+            "pypi.org --trusted-host files.pythonhosted.org "\
+            "-r ./requirements/production.txt --cache-dir /tmp"
     )
-    if not result or result.return_code != 0:
-        print("Updating python dependencies to its required versions...")
-        run_as_app_user(
-            conn,
-            "pip install --trusted-host "\
-                "pypi.org --trusted-host files.pythonhosted.org "\
-                "-r ./requirements/production.txt --cache-dir /tmp"
-        )
 
 
 def collect_staticfiles(conn):
@@ -259,7 +260,6 @@ def collect_staticfiles(conn):
 
 def run_migrations(conn):
     ''' Run all database migrations at remote '''
-    # run any migrations
     run_as_app_user(
         conn,
         "cd app && python ./manage.py migrate"
