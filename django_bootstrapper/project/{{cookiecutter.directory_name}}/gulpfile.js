@@ -78,30 +78,48 @@ function doBuild(cb) {
     .pipe(dest('dist'));
 }
 
-/* Task to bump version number */
+/**
+ * Bump package version number. The version quadrant incremented
+ * depends on the build type (buildOptions.type).
+ */
 function bumpVersion(cb) {
   return src('./package.json')
     .pipe(bump({type: buildOptions.release}))
     .pipe(dest('./'));
 }
 
-function commitChanges() {
-  return gulp.src('.')
+/**
+ * Commit all changes made to the Git repo.
+ *
+ * @param {*} cb Gulp task completion callback
+ */
+function commitChanges(cb) {
+  return src('.')
     .pipe(git.add())
-    .pipe(git.commit('[Prerelease] Bumped version number'));
+    .pipe(git.commit('Post-release build commit'));
 }
 
-function pushChange (done) {
+/**
+ * Push repo changes to 'origin' remote.
+ * 
+ * @param {*} done Gulp task completion callback.
+ */
+function pushChange(done) {
   git.push('origin', 'master', done);
 }
 
-function createNewTag(done) {
+/**
+ * Create release tag.
+ * 
+ * @param {*} done Gulp task completion callback.
+ */
+function createGitTag(done) {
   var version = getPackageJsonVersion();
-  git.tag(version, 'Created Tag for version: ' + version, function (error) {
+  git.tag(version, 'Relase Version: ' + version, function (error) {
     if (error) {
       return done(error);
     }
-    git.push('origin', 'master', {args: '--tags'}, done);
+    //git.push('origin', 'master', {args: '--tags'}, done);
   });
 
 }
@@ -109,15 +127,29 @@ function createNewTag(done) {
 /**
  * Write version.txt with the current version read from package.json
  * to dist/version.txt
+ * 
+ * @param {*} done Gulp task completion callback.
  */
 function emitVersion(cb) {
   var version = getPackageJsonVersion();
   fs.writeFile('dist/version.txt', version, cb);
 }
 
-
 /*
-  PROCESS SCRIPT COMMAND LINE ARGUMENTS
+ * PROCESS SCRIPT COMMAND LINE ARGUMENTS
+ *
+ * Command supports the following command line options:
+ * 
+ *  --type {[stage]|release}
+ *    Type of release. If release type is set to 'stage', integrated
+ *    git commit/tag operation won't be carried out.
+ * 
+ *  --release {major|minor|[patch]}
+ *    The type of release. This determines which version quadrant is incremented
+ *    for 'release' build types.
+ * 
+ *  --tests {yes|[no]}
+ *    Whether to execute the package tests before going on to build.
  */
 
 // Default build options
@@ -168,23 +200,32 @@ if (['yes', 'no'].indexOf(buildOptions.tests) < 0) {
   throw new PluginError('params', 'Invalid value specified for "tests" parameter. Valid values are {yes|no}.');
 }
 
+/**
+ * Release build type tasks
+ */
+function emptyTask(cb) {
+  cb();
+}
+
+function releaseTasks(cb) {
+  if (buildOptions.type == 'release') {
+    bumpVersion(cb);
+    commitChanges(cb);
+    createGitTag(cb);  
+  }
+  cb();
+}
+
+/**
+ * EXPORTED tasks
+ */
+
+// Clean the dist/ folder
 exports.clean = clean;
-
-exports.build = series(clean, doBuild)
-
-// exports.buildHomePageJS = buildHomePageJS;
-// exports.buildHomePageCSS = buildHomePageCSS;
-exports['bump-version'] = bumpVersion;
-
-exports.release = series(
-  clean,
-  doBuild,
-  emitVersion,
-  bumpVersion
-)
 
 exports.default = series(
   clean,
   doBuild,
   emitVersion,
+  releaseTasks
   );
