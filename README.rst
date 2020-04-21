@@ -2,24 +2,13 @@
 django-bootstrapper
 ===================
 
+Django project bootstrapper that includes scripts to deploy the project to a Linux server.
 
 
+How to use
+----------
 
+* Install the package from this repo using pip. Package will add the command `django_bootstrapper` to the path.
+* Use the `django_bootstrapper` command to prep the remote system and generate a local django project template.
+  You may use `django_bootstrapper --help` to see the various command line options supported by this command.
 
-
-BBDjango project bootstrapper that includes scrits to deploy the project to a Linux server
-
-
-
-Features
---------
-
-* TODO
-
-Credits
--------
-
-This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypackage`_ project template.
-
-.. _Cookiecutter: https://github.com/audreyr/cookiecutter
-.. _`audreyr/cookiecutter-pypackage`: https://github.com/audreyr/cookiecutter-pypackage
