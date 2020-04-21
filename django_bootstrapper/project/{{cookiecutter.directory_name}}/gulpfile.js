@@ -212,6 +212,8 @@ function releaseTasks(cb) {
     bumpVersion(cb);
     commitChanges(cb);
     createGitTag(cb);  
+  } else {
+    console.log('Skipping git operations for non-release build')
   }
   cb();
 }
@@ -223,6 +225,7 @@ function releaseTasks(cb) {
 // Clean the dist/ folder
 exports.clean = clean;
 
+// Build/bump-version/commit code -- all in one
 exports.default = series(
   clean,
   doBuild,
