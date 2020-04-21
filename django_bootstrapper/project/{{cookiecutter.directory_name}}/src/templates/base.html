@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+{% load i18n static %}
+<html>
+<head>
+{% include "meta.html" %}
+{% include "_head.html" %}
+{% block extrastyle %}{% endblock extrastyle %}
+{% block extrajs %}{% endblock extrajs %}
+{% block extrahead %}{% endblock extrahead %}
+<title>mysite</title>
+</head>
+<body>
+{% block pagewrapper %}
+{% endblock pagewrapper %}
+{% include "_foot.html" %}
+</body>
+</html>

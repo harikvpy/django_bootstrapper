@@ -1,0 +1,18 @@
+{% load i18n static %}
+{% comment %}
+<HEAD> elements that are to be included in all templates. Since we use
+multiple base templates, we normalize these elements into its own template
+to avoid code duplication.
+{% endcomment %}
+<!-- Icons -->
+<!-- <link rel="shortcut icon" href="{% static 'img/favicon/favicon.ico' %}"> -->
+<!-- END Icons -->
+<!-- Web fonts -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<!-- build:remove -->
+<!-- list multiple CSS files here. They will be compiled into a single CSS file which 
+  can be included in the build:template section below.
+-->
+<!-- /build -->
+<!-- build:template
+/build -->

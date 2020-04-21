@@ -1,0 +1,13 @@
+{
+    "app_name": "",
+    "project_slug": "{{ cookiecutter.app_name|lower|replace(' ', '_') }}",
+    "directory_name": "{{ cookiecutter.project_slug }}",
+    "domain": "{{ cookiecutter.project_slug }}.com",
+    "user_group": "webapps",
+    "user_name": "{{ cookiecutter.project_slug }}",
+    "host": "{{ cookiecutter.domain }}",
+    "port": 22,
+    "_copy_without_render": [
+        "*.html"
+    ]
+}

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block extrastyle %}
+<style>
+.vertical-center {
+    min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
+    min-height: 100vh; /* These two lines are counted as one :-)       */
+    display: flex;
+    align-items: center;
+}
+</style>
+{% endblock %}
+{% block pagewrapper %}
+<div class="vertical-center">
+    <div class="container text-center">
+        <h1>{{cookiecutter.domain}} HOME</h1>
+    </div>
+</div>
+{% endblock pagewrapper %}

@@ -1,0 +1,26 @@
+{
+  "name": "{{cookiecutter.app_name}}",
+  "version": "0.1.0",
+  "description": "{{cookiecutter.app_name}} Website",
+  "author": "Hari Mahadevan",
+  "keywords": [],
+  "devDependencies": {
+    "date-time": "^2.1.0",
+    "del": "^3.0.0",
+    "gulp": "^4.0.0",
+    "gulp-bump": "^3.1.1",
+    "gulp-clean-css": "^4.0.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-git": "^2.8.0",
+    "gulp-if": "^2.0.2",
+    "gulp-processhtml": "^1.2.0",
+    "gulp-rename": "^1.4.0",
+    "gulp-strip-comments": "^2.5.2",
+    "gulp-uglify": "^3.0.1",
+    "plugin-error": "^1.0.1",
+    "ts-node": "^7.0.1"
+  },
+  "dependencies": {
+    "@types/gulp": "^4.0.5"
+  }
+}

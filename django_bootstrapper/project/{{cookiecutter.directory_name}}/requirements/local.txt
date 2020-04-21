@@ -1,0 +1,9 @@
+-r base.txt
+
+django-extensions==2.2.9
+ipdb==0.13.2
+ipython==7.13.0
+ipython-genutils==0.2.0
+pylint==2.4.4
+pylint-django==2.0.15
+pylint-plugin-utils==0.6

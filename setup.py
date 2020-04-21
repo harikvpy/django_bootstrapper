@@ -10,7 +10,9 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = [ ]
+requirements = [
+    'cookiecutter',
+]
 
 setup_requirements = [ ]
 
@@ -41,7 +43,30 @@ setup(
     include_package_data=True,
     keywords='django_bootstrapper',
     name='django_bootstrapper',
-    packages=find_packages(include=['django_bootstrapper', 'django_bootstrapper.*']),
+    packages=find_packages(include=[
+        'django_bootstrapper', 'django_bootstrapper.*'
+        ]),
+    package_data={
+        'django_bootstrapper': [
+            'data/*',
+            'data/**/*',
+            'project/*',
+            'project/**/*'
+        ]
+    },
+    # data_files=[
+    #     (
+    #         'django_bootstrapper/data', [
+    #             'django_bootstrapper/data/supervisord',
+    #             'django_bootstrapper/data/supervisord.conf'
+    #         ]
+    #     ),
+    #     (
+    #         'django_bootstrapper/project', [
+                
+    #         ]
+    #     )
+    # ],
     setup_requires=setup_requirements,
     test_suite='tests',
     tests_require=test_requirements,
