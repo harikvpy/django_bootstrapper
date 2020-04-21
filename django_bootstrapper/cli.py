@@ -250,6 +250,7 @@ def main():
             "Folder {0} has the project template.\n"
             "You may run the following (in sequence) from the project folder\n:"
             "to build & depoly the project to the remote server:\n"
+            "    0. git init && git add --all && git commit -a -m \"initial commit\" \n"
             "    1. npm i\n"
             "    2. gulp\n"
             "    3. fab deploy\n".format(slug)
