@@ -25,6 +25,12 @@ function childProcessTask(cb) {
   });
 }
 
+function getPackageJsonVersion () {
+  // We parse the json file instead of using require because require caches
+  // multiple calls so the version number won't be updated
+  return JSON.parse(fs.readFileSync('./package.json', 'utf8')).version;
+};
+
 /* Cleans up the dist folder */
 function clean() {
   return del('dist/');
@@ -72,29 +78,6 @@ function doBuild(cb) {
     .pipe(dest('dist'));
 }
 
-/* Task to minify and combine all the homepage JS files into a single JS file */
-function buildHomePageJS() {
-  return src(`src/${PROJECT}/public/static/public/js/*.js`, { base: 'src' })
-    .pipe(strip())
-    .pipe(gulpif(isUnminifiedJavascript, uglify()))
-    .pipe(concat('homepage.min.js'))
-    .pipe(dest(`dist/${PROJECT}/public/static/public/js`));
-}
-
-/**
- * Sample task to minify and combine all the CSS in one of the source
- * folders into a single CSS file
- */
-function buildHomePageCSS(cb) {
-  return src([
-    'src/public/static/public/css/responsive.css'
-    ], { base: 'src' })
-    .pipe(cleanCSS())
-    .pipe(concat('homepage.css'))
-    .pipe(dest(`dist/${PROJECT}/public/static/public/css`));
-}
-
-
 /* Task to bump version number */
 function bumpVersion(cb) {
   return src('./package.json')
@@ -121,12 +104,17 @@ function createNewTag(done) {
     git.push('origin', 'master', {args: '--tags'}, done);
   });
 
-  function getPackageJsonVersion () {
-    // We parse the json file instead of using require because require caches
-    // multiple calls so the version number won't be updated
-    return JSON.parse(fs.readFileSync('./package.json', 'utf8')).version;
-  };
 }
+
+/**
+ * Write version.txt with the current version read from package.json
+ * to dist/version.txt
+ */
+function emitVersion(cb) {
+  var version = getPackageJsonVersion();
+  fs.writeFile('dist/version.txt', version, cb);
+}
+
 
 /*
   PROCESS SCRIPT COMMAND LINE ARGUMENTS
@@ -191,9 +179,12 @@ exports['bump-version'] = bumpVersion;
 exports.release = series(
   clean,
   doBuild,
+  emitVersion,
   bumpVersion
 )
+
 exports.default = series(
   clean,
-  doBuild
+  doBuild,
+  emitVersion,
   );
