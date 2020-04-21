@@ -54,19 +54,6 @@ setup(
             'project/**/*'
         ]
     },
-    # data_files=[
-    #     (
-    #         'django_bootstrapper/data', [
-    #             'django_bootstrapper/data/supervisord',
-    #             'django_bootstrapper/data/supervisord.conf'
-    #         ]
-    #     ),
-    #     (
-    #         'django_bootstrapper/project', [
-                
-    #         ]
-    #     )
-    # ],
     setup_requires=setup_requirements,
     test_suite='tests',
     tests_require=test_requirements,
