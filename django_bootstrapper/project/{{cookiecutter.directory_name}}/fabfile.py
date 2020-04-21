@@ -165,6 +165,8 @@ def update(ctx):
         remove_old_site_backup(conn)
         #remove_new_site_tempfolder(conn)
 
+        print("\nApp successfully updated!\n")
+
 
 def clean_target(conn):
     '''Removes any existing file/folders from a previous deploy
