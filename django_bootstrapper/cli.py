@@ -208,24 +208,24 @@ def main():
         config = Config(overrides={'sudo': {'password': options.password}})
         conn = Connection(options.host, port=options.port, config=config)
 
-        # install_prerequisites(conn)
-        # install_certbot(conn)
-        # install_supervisor_service(conn)
+        install_prerequisites(conn)
+        install_certbot(conn)
+        install_supervisor_service(conn)
 
-        # create_automation_account(conn, options)
+        create_automation_account(conn, options)
 
-        # create_virtualenv(conn, options)
-        # upgrade_pip(conn, options)
-        # create_folders(conn, options)
-        # create_unix_socket(conn, options)
+        create_virtualenv(conn, options)
+        upgrade_pip(conn, options)
+        create_folders(conn, options)
+        create_unix_socket(conn, options)
 
-        # generate_secret_key(conn, options)
-        # generate_db_password(conn, options)
+        generate_secret_key(conn, options)
+        generate_db_password(conn, options)
 
-        # print(
-        #     "Remote prepped for deployment.\n"
-        #         "Now going on to create project template."
-        # )
+        print(
+            "Remote prepped for deployment.\n"
+                "Going on to create project template."
+        )
 
         slug = options.app.lower().replace(' ', '_')
         project_folder = os.path.join(os.path.dirname(__file__), 'project')
@@ -246,7 +246,7 @@ def main():
             output_dir=options.output_dir
         )
 
-        print("Done!\n"
+        print("\nDone!\n"
             "Folder {0} has the project template.\n"
             "You may run the following (in sequence) from the project folder\n:"
             "to build & depoly the project to the remote server:\n"

@@ -120,8 +120,8 @@ def deploy(ctx):
         create_supervisor_conf(conn)
         switch_nginx_to_production(conn)
         conn.sudo('supervisorctl reload')
-        #start_appserver(conn)
-        #remove_new_site_tempfolder(conn)
+
+        print("\nApp successfully deployed!\n")
 
 
 @task
