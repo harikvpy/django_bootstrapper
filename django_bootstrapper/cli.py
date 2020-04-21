@@ -1,4 +1,5 @@
 """Console script for django_bootstrapper."""
+import sys
 import os
 import argparse
 from getpass import getpass
