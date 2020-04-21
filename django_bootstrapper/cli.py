@@ -180,6 +180,7 @@ def parse_arguments():
     parser.add_argument('--password', help="Sudo password. If not specified, you'll be prompted for one.")
     parser.add_argument('--no_input', type=bool, help="Skip prompting for input while generating project template.", default=False)
     parser.add_argument('--overwrite_if_exists', type=bool, help='If the project template target directory exists, overwrite its contents.', default=False)
+    parser.add_argument('--output_dir', help='Output directory where the generated project bootstrap code is to be saved.', default='.')
 
     return parser.parse_args()
 
@@ -227,8 +228,9 @@ def main():
         # )
 
         slug = options.app.lower().replace(' ', '_')
+        project_folder = os.path.join(os.path.dirname(__file__), 'project')
         cookiecutter(
-            './project',
+            project_folder,
             extra_context={
                 'app_name': options.app,
                 'project_slug': slug,
@@ -240,7 +242,8 @@ def main():
                 'port': options.port
             },
             overwrite_if_exists=options.overwrite_if_exists,
-            no_input=options.no_input
+            no_input=options.no_input,
+            output_dir=options.output_dir
         )
 
         print("Done!\n"
