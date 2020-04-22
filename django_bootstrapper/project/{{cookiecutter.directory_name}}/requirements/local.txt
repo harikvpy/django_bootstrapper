@@ -7,3 +7,5 @@ ipython-genutils==0.2.0
 pylint==2.4.4
 pylint-django==2.0.15
 pylint-plugin-utils==0.6
+fabric
+invocations
