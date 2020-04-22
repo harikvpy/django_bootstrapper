@@ -9,6 +9,7 @@ from cookiecutter.main import cookiecutter
 OS_PREREQS = [
     'git',
     'build-essential',
+    'python3',
     'python3-dev',
     'python3-pip',
     'nginx',
@@ -174,7 +175,7 @@ def generate_db_password(conn, options):
 
 def parse_arguments():
     parser = argparse.ArgumentParser()
-    parser.add_argument('host', help="Remote host IP address or hostname")
+    parser.add_argument('host', help="Remote host IP address or hostname. If you have SSH root access enabled via keys, specify 'root@hostname'.")
     parser.add_argument('app', help="Name of the app, usually a single word without any dash or underscore")
     parser.add_argument('domain', help="Domain name, like example.com. To specify a subdomain, specify the full subdomain.")
     parser.add_argument('--port', type=int, help="Host SSH port, if it is different from the standard 22.", default=22)
@@ -208,7 +209,10 @@ def main():
         exit(1)
 
     try:
-        config = Config(overrides={'sudo': {'password': options.password}})
+        if '@' in options.host:
+            config = Config()
+        else:
+            config = Config(overrides={'sudo': {'password': options.password}})
         conn = Connection(options.host, port=options.port, config=config)
 
         if not options.skip_prep:
