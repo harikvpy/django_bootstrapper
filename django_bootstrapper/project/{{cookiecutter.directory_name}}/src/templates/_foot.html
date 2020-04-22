@@ -1,3 +1,11 @@
+{% load static %}
 {% comment %}
 Elements to be included at the bottom of the page, just before <body> is closed
 {% endcomment %}
+<!-- build:remove -->
+<script type="text/javascript" src="{% static 'js/site.js' %}"></script>
+<!-- /build -->
+
+<!-- build:template
+<script type="text/javascript" src="{% static 'js/site.min.js' %}"></script>
+/build -->
