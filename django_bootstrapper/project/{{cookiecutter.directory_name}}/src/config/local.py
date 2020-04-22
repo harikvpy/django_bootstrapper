@@ -13,3 +13,7 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
+# Recaptcha test keys
+#RECAPTCHA_PUBLIC_KEY = ''
+#RECAPTCHA_PRIVATE_KEY = ''

@@ -60,3 +60,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, '../static')
 
 # MEDIA - would require changes if using a separate media storage volume
 MEDIA_ROOT = os.path.join(BASE_DIR, '../media')
+
+# Recaptcha production keys
+#RECAPTCHA_PUBLIC_KEY = ''
+#RECAPTCHA_PRIVATE_KEY = ''
