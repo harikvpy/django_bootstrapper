@@ -207,17 +207,6 @@ function emptyTask(cb) {
   cb();
 }
 
-function releaseTasks(cb) {
-  if (buildOptions.type == 'release') {
-    bumpVersion(cb);
-    commitChanges(cb);
-    createGitTag(cb);  
-  } else {
-    console.log('Skipping git operations for non-release build')
-  }
-  cb();
-}
-
 /**
  * EXPORTED tasks
  */
@@ -228,7 +217,9 @@ exports.clean = clean;
 // Build/bump-version/commit code -- all in one
 exports.default = series(
   clean,
+  buildOptions.type == 'release' ? series(
+    bumpVersion, commitChanges, createGitTag
+  ) : emptyTask, 
   doBuild,
   emitVersion,
-  releaseTasks
   );
