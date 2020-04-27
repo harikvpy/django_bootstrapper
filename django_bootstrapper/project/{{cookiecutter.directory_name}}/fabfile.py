@@ -98,7 +98,9 @@ def deploy(ctx):
     # if not resp:
     #     exit(1)
 
-    with Connection(HOST, port=PORT, config=ctx.config) as conn:
+    host = ctx.host if hasattr(ctx, 'host') else HOST
+    port = ctx.port if hasattr(ctx, 'port') else PORT
+    with Connection(host, port=port, config=ctx.config) as conn:
         clean_target(conn)
         upload_scripts(
             conn,
