@@ -201,12 +201,13 @@ def main():
     options = parse_arguments()
 
     # Get sudo password from environment
-    if not options.password:
-        options.password = getpass('Enter sudo password: ')
+    if not options.skip_prep:
+        if not options.password:
+            options.password = getpass('Enter sudo password: ')
 
-    if not options.password:
-        print('Sudo password is required.')
-        exit(1)
+        if not options.password:
+            print('Sudo password is required.')
+            exit(1)
 
     try:
         if '@' in options.host:
