@@ -86,7 +86,8 @@ def install_supervisor_service(conn):
         # start supervisord, which requires interactive login
         # So we login as root from within sudo
         conn.sudo("service supervisord start")
-
+    else:
+        print('Supervisor service detected. Skipping installation.')
 
 def create_group(c, group):
     '''Creates the user group 'group'.'''
