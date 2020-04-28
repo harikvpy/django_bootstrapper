@@ -262,17 +262,17 @@ def install_dependencies(conn):
 def collect_staticfiles(conn):
     ''' Collects static files of all apps to ./static folder. '''
     run_as_app_user(conn, "rm -rf static")
-    run_as_app_user(
+    run_app_command(
         conn,
-        "cd app && python ./manage.py collectstatic --noinput"
+        "collectstatic --noinput"
     )
 
 
 def run_migrations(conn):
     ''' Run all database migrations at remote '''
-    run_as_app_user(
+    run_app_command(
         conn,
-        "cd app && python ./manage.py migrate"
+        "migrate"
     )
 
 
