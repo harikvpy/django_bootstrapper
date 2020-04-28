@@ -15,6 +15,7 @@ OS_PREREQS = [
     'nginx',
     'postgresql',
     'libpq-dev',
+    'gettext'
 ]
 
 PYTHON_PREREQS = [

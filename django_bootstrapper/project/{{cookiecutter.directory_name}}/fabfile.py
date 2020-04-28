@@ -117,6 +117,9 @@ def deploy(ctx):
         install_dependencies(conn)
         collect_staticfiles(conn)
 
+        # enable for multilingual websites
+        #compile_messages(conn)
+
         reset_db(conn)
         prepare_db(conn)
         create_supervisor_conf(conn)
@@ -163,6 +166,9 @@ def update(ctx):
         collect_staticfiles(conn)
 
         run_migrations(conn)
+
+        # enable for multilingual websites
+        #compile_messages(conn)
 
         start_appserver(conn)
         switch_nginx_to_production(conn)
@@ -267,6 +273,14 @@ def run_migrations(conn):
     run_as_app_user(
         conn,
         "cd app && python ./manage.py migrate"
+    )
+
+
+def compile_messages(conn):
+    '''Compile gettext messages in django.po into .mo files'''
+    run_app_command(
+        conn,
+        "compilemessages"
     )
 
 
