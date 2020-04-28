@@ -139,7 +139,9 @@ def update(ctx):
     if -H <host> argument is not supplied, defaults target to live server at
     {{cookiecutter.domain}}.
     '''
-    with Connection(HOST, port=PORT, config=ctx.config) as conn:
+    host = ctx.host if hasattr(ctx, 'host') else HOST
+    port = ctx.port if hasattr(ctx, 'port') else PORT
+    with Connection(host, port=port, config=ctx.config) as conn:
 
         resp = console.confirm("This will UPDATE the remote server with the contents of 'dist' folder. \n"\
             "ARE YOU SURE?", assume_yes=False)
